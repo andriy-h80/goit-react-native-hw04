@@ -1,13 +1,15 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
 
-const PostsScreen = () => {
+const PostsScreen = ({ navigation }) => {
   return (
-    <View style={styles.page}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleContainerText}>Публікації</Text>
         </View>
-        <TouchableOpacity style={styles.buttonLogOut}>
+        <TouchableOpacity
+          style={styles.buttonLogOut}
+          onPress={() => navigation.navigate("Login")}>
           <Image
             style={styles.iconLogOut}
             source={require("../images/log-out.png")}
@@ -26,22 +28,73 @@ const PostsScreen = () => {
           </View>
         </View>
       </View>
-      <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.buttonMore}>
-          <Image
-            style={styles.iconMore}
-            source={require("../images/grid.png")}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonAdd}>
-          <Image style={styles.iconAdd} source={require("../images/new.png")} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonUser}>
-          <Image
-            style={styles.iconUser}
-            source={require("../images/user.png")}
-          />
-        </TouchableOpacity>
+      <View style={styles.posts}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={styles.post}>
+            <TouchableOpacity
+              style={styles.postImageLink}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <Image
+                style={styles.postImage}
+                source={require("../images/forest.jpg")}
+              />
+            </TouchableOpacity>
+            <View style={styles.postContent}>
+              <Text style={styles.postTitle}>Ліс</Text>
+              <View style={styles.postMeta}>
+                <View style={styles.postComments}>
+                  <Image
+                    style={styles.postIcon}
+                    source={require("../images/comments-o.png")}
+                  />
+                  <Text style={styles.postCount}>0</Text>
+                </View>
+                <View style={styles.postLocationInfo}>
+                  <Image
+                    style={styles.postIcon}
+                    source={require("../images/map.png")}
+                  />
+                  <Text style={styles.postLocationAddress}>
+                    Ivano-Frankivs'k Region, Ukraine
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View style={styles.post}>
+            <TouchableOpacity
+              style={styles.postImageLink}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <Image
+                style={styles.postImage}
+                source={require("../images/sunset.jpg")}
+              />
+            </TouchableOpacity>
+            {/* <View style={styles.postContent}>
+              <Text style={styles.postTitle}>Захід на Чорному морі</Text>
+              <View style={styles.postMeta}>
+                <View style={styles.postComments}>
+                  <Image
+                    style={styles.postIcon}
+                    source={require("../images/comments-o.png")}
+                  />
+                  <Text style={styles.postCount}>0</Text>
+                </View>
+                <View style={styles.postLocationInfo}>
+                  <Image
+                    style={styles.postIcon}
+                    source={require("../images/map.png")}
+                  />
+                  <Text style={styles.postLocationAddress}>
+                    Odesa Region, Ukraine
+                  </Text>
+                </View>
+              </View>
+            </View> */}
+          </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -50,85 +103,119 @@ const PostsScreen = () => {
 export default PostsScreen;
 
 const styles = StyleSheet.create({
-    page: {
-      flex: 1,
-    },
-    header: {
-      position: "relative",
-      borderBottomColor: "rgba(0, 0, 0, 0.3)",
-      borderBottomStyle: "solid",
-      borderBottomWidth: 1,
-      paddingTop: 44,
-      marginBottom: 16,
-    },
-    titleContainer: {
-      width: 175,
-      height: 44,
-      justifyContent: "center",
-      alignItems: "center",
-      marginRight: "auto",
-      marginLeft: "auto",
-    },
-    titleContainerText: {
-      fontSize: 17,
-      lineHeight: 22,
-      textAlign: "center",
-      fontFamily: "Roboto-Medium",
-    },
-    buttonLogOut: {
-      position: "absolute",
-      top: "50%",
-      marginTop: 32,
-      height: 24,
-      right: 10,
-    },
-    iconLogOut: {
-      width: 24,
-      height: 24,
-    },
-    user: {
-      flexDirection: "row",
-      alignItems: "center",
-      padding: 16,
-    },
-    userImage: {
-      borderRadius: 16,
-      width: 60,
-      height: 60,
-      marginRight: 8,
-    },
-    userName: {
-      lineHeight: 15,
-      fontFamily: "Roboto-Bold",
-      fontSize: 13,
-    },
-    userEmail: {
-      lineHeight: 13,
-      fontFamily: "Roboto-Regular",
-      fontSize: 11,
-    },
-    actionButtons: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      marginTop: "auto",
-      borderTopColor: "rgba(0, 0, 0, 0.3)",
-      borderTopStyle: "solid",
-      borderTopWidth: 1,
-      paddingTop: 9,
-      paddingBottom: 22,
-      gap: 31,
-    },
-    iconMore: {
-      width: 40,
-      height: 40,
-    },
-    iconAdd: {
-      width: 70,
-      height: 40,
-    },
-    iconUser: {
-      width: 40,
-      height: 40,
-    },
+  container: {
+    flex: 1,
+  },
+  header: {
+    position: "relative",
+    borderBottomColor: "rgba(0, 0, 0, 0.3)",
+    borderBottomStyle: "solid",
+    borderBottomWidth: 1,
+    paddingTop: 44,
+    marginBottom: 16,
+  },
+  titleContainer: {
+    width: 175,
+    height: 44,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: "auto",
+    marginLeft: "auto",
+  },
+  titleContainerText: {
+    fontSize: 17,
+    lineHeight: 22,
+    textAlign: "center",
+    fontFamily: "Roboto-Medium",
+  },
+  buttonLogOut: {
+    position: "absolute",
+    top: "50%",
+    marginTop: 32,
+    height: 24,
+    right: 10,
+  },
+  iconLogOut: {
+    width: 24,
+    height: 24,
+  },
+  user: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+  },
+  userImage: {
+    borderRadius: 16,
+    width: 60,
+    height: 60,
+    marginRight: 8,
+  },
+  userName: {
+    lineHeight: 15,
+    fontFamily: "Roboto-Bold",
+    fontSize: 13,
+  },
+  userEmail: {
+    lineHeight: 13,
+    fontFamily: "Roboto-Regular",
+    fontSize: 11,
+  },
+  posts: {
+    flex: 1,
+    position: "relative",
+  },
+  scrollContent: {
+    padding: 16,
+  },
+  post: {
+    marginBottom: 32,
+  },
+  postImageLink: {
+    marginBottom: 8,
+  },
+  postImage: {
+    height: 240,
+    borderRadius: 8,
+    width: "100%",
+  },
+  postTitle: {
+    fontSize: 16,
+    lineHeight: 18,
+    color: "#212121",
+    marginBottom: 8,
+  },
+  postMeta: {
+    flexDirection: "row",
+    gap: 24,
+  },
+  postIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 4,
+  },
+  postCount: {
+    fontSize: 16,
+    lineHeight: 18,
+    color: "#BDBDBD",
+  },
+  postComments: {
+    flexShrink: 0,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  postLikes: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  postLocationInfo: {
+    marginLeft: "auto",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  postLocationAddress: {
+    fontSize: 16,
+    lineHeight: 18,
+    color: "#212121",
+    textDecorationLine: "underline",
+  },
 });

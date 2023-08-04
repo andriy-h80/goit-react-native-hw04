@@ -1,18 +1,19 @@
 import {
-    ImageBackground,
-    StyleSheet,
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    Platform,
-    Keyboard,
-    TouchableWithoutFeedback,
-  } from "react-native";
+  ImageBackground,
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import React, { useState, useEffect  } from "react";
   
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [focusedInput, setFocusedInput] = useState(null);
   const [togglePassword, setTogglePassword] = useState(false);
 
@@ -34,6 +35,8 @@ const LoginScreen = () => {
 
     setEmail("");
     setPassword("");
+
+    navigation.navigate("Home");
     }
   };
 
@@ -41,79 +44,81 @@ const LoginScreen = () => {
     setTogglePassword(!togglePassword);
   };
   
-    return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <ImageBackground
-            source={require("../images/bg-img.jpg")}
-            style={styles.imageBackground}
-            imageStyle={{
-              minHeight: 812,
-            }}
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../images/bg-img.jpg")}
+          style={styles.imageBackground}
+          imageStyle={{
+            minHeight: 812,
+          }}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.loginContainer}
           >
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
-              style={styles.loginContainer}
-            >
-            <View style={styles.titleContainer}>
-              <Text style={styles.loginTitle}>Увійти</Text>
+          <View style={styles.titleContainer}>
+            <Text style={styles.loginTitle}>Увійти</Text>
+          </View>
+          <View style={styles.formContainer}>
+            <TextInput
+              style={[
+                [styles.input],
+                focusedInput === "email" && [styles.inputFocused],
+              ]}
+              placeholderTextColor={"#BDBDBD"}
+              placeholder="Адреса електронної пошти"
+              name="email"
+              value={email}
+              onChangeText={(text) => {
+                setEmail(text);
+              }}
+              onFocus={() => setFocusedInput("email")}
+              onBlur={() => setFocusedInput(null)}
+            />
+          </View>
+          <View style={styles.formContainer}>
+            <TextInput
+              style={[
+                [styles.input],
+                focusedInput === "password" && [styles.inputFocused],
+              ]}
+              placeholderTextColor={"#BDBDBD"}
+              placeholder="Пароль"
+              name="password"
+              value={password}
+              secureTextEntry={togglePassword ? false : true}
+              onChangeText={(text) => {
+                setPassword(text);
+              }}
+              onFocus={() => setFocusedInput("password")}
+              onBlur={() => setFocusedInput(null)}
+            />
+            <Pressable style={styles.showTextButton} onPress={showPassword}>
+              <Text style={styles.showText}>
+                {!togglePassword ? "Показати" : "Приховати"}
+              </Text>
+            </Pressable>
+          </View>
+          <View style={styles.actions}>
+            <TouchableOpacity style={styles.loginButton} onPress={signIn}>
+              <Text style={styles.loginButtonText}>Увійти</Text>
+            </TouchableOpacity>
+            <View style={styles.redirection}>
+              <Text style={styles.redirectionText}>Немає акаунту?</Text>
+                <TouchableOpacity>
+                  <Text style={styles.redirectionLink} onPress={() => navigation.navigate("Registration")}>
+                    Зареєструватися
+                  </Text>
+                </TouchableOpacity>
             </View>
-            <View style={styles.formContainer}>
-              <TextInput
-                style={[
-                  [styles.input],
-                  focusedInput === "email" && [styles.inputFocused],
-                ]}
-                placeholderTextColor={"#BDBDBD"}
-                placeholder="Адреса електронної пошти"
-                name="email"
-                value={email}
-                onChangeText={(text) => {
-                  setEmail(text);
-                }}
-                onFocus={() => setFocusedInput("email")}
-                onBlur={() => setFocusedInput(null)}
-              />
-            </View>
-            <View style={styles.formContainer}>
-              <TextInput
-                style={[
-                  [styles.input],
-                  focusedInput === "password" && [styles.inputFocused],
-                ]}
-                placeholderTextColor={"#BDBDBD"}
-                placeholder="Пароль"
-                name="password"
-                value={password}
-                secureTextEntry={togglePassword ? false : true}
-                onChangeText={(text) => {
-                  setPassword(text);
-                }}
-                onFocus={() => setFocusedInput("password")}
-                onBlur={() => setFocusedInput(null)}
-              />
-              <TouchableOpacity style={styles.showTextButton} onPress={showPassword}>
-                <Text style={styles.showText}>
-                  {!togglePassword ? "Показати" : "Приховати"}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.actions}>
-              <TouchableOpacity style={styles.loginButton} onPress={signIn}>
-                <Text style={styles.loginButtonText}>Увійти</Text>
-              </TouchableOpacity>
-              <View style={styles.redirection}>
-                <Text style={styles.redirectionText}>Немає акаунту?</Text>
-                  <TouchableOpacity>
-                    <Text style={styles.redirectionLink}>Зареєструватися</Text>
-                  </TouchableOpacity>
-              </View>
-            </View>
-            </KeyboardAvoidingView>
-          </ImageBackground>
-        </View>
-      </TouchableWithoutFeedback>
-    );
+          </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
+  );
 };
 
 export default LoginScreen;
@@ -168,15 +173,16 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   showTextButton: {
-    fontSize: 16,
+    position: "absolute",
   },
   showText: {
-    position: "absolute",
     top: "50%",
     right: 16,
     lineHeight: 24,
-    marginTop: -42,
+    marginTop: 4,
+    marginLeft: 275,
     color: "#1B4371",
+    fontSize: 16,
   },
   actions: {
     overflow: "hidden",

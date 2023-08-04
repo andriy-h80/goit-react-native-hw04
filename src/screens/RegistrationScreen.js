@@ -1,19 +1,20 @@
 import {
-    ImageBackground,
-    Image,
-    StyleSheet,
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    Platform,
-    Keyboard,
-    TouchableWithoutFeedback,
-  } from "react-native";
+  ImageBackground,
+  Image,
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import React, { useState, useEffect } from "react";
   
-const RegistrationScreen = () => {
+const RegistrationScreen = ({ navigation }) => {
   const [focusedInput, setFocusedInput] = useState(null);
   const [togglePassword, setTogglePassword] = useState(false);
 
@@ -42,6 +43,8 @@ const RegistrationScreen = () => {
       setLogin("");
       setEmail("");
       setPassword("");
+
+      navigation.navigate("Home");
     }
   };
   const showPassword = () => {
@@ -128,11 +131,11 @@ const RegistrationScreen = () => {
               onFocus={() => setFocusedInput("password")}
               onBlur={() => setFocusedInput(null)}
             />
-            <TouchableOpacity style={styles.showTextButton} onPress={showPassword}>
+            <Pressable style={styles.showTextButton} onPress={showPassword}>
               <Text style={styles.showText}>
                 {!togglePassword ? "Показати" : "Приховати"}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
           <View style={styles.actions}>
             <TouchableOpacity style={styles.registrationButton} onPress={signUp}>
@@ -141,7 +144,9 @@ const RegistrationScreen = () => {
             <View style={styles.redirection}>
               <Text style={styles.redirectionText}>Вже є акаунт?</Text>
               <TouchableOpacity>
-                <Text style={styles.redirectionLink}>Увійти</Text>
+                <Text style={styles.redirectionLink} onPress={() => navigation.navigate("Login")}>
+                  Увійти
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -229,15 +234,16 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   showTextButton: {
-    fontSize: 16,
+    position: "absolute",
   },
   showText: {
-    position: "absolute",
     top: "50%",
     right: 16,
     lineHeight: 24,
-    marginTop: -42,
+    marginTop: 4,
+    marginLeft: 275,
     color: "#1B4371",
+    fontSize: 16,
   },
   actions: {
     overflow: "hidden",
